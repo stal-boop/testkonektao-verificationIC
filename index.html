@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Konektao LLC Employment Verification</title>
+  <style>
+    body {
+      font-family: Cambria, Cambria;
+      background: #f4f6f5;
+      text-align: center;
+      padding: 40px;
+      color: #1f2d2b;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+
+    h2 {
+      color: #2a8c7b;
+      letter-spacing: 2px;
+      font-size: 16px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #2a8c7b;
+      display: inline-block;
+      padding-bottom: 5px;
+      width: 300px;
+    }
+
+    .card {
+      background: #eef2f1;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .info-box {
+      background: #ffffff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .status-box {
+      padding: 15px;
+      border-radius: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .status-active {
+      border: 2px solid #2a8c7b;
+      background: #e8f5f2;
+      color: #2a8c7b;
+    }
+
+    .status-inactive {
+      border: 2px solid #c0392b;
+      background: #fdecea;
+      color: #c0392b;
+    }
+
+    .status-header {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-icon {
+      font-size: 16px;
+    }
+
+    .error {
+      background: #fdecea;
+      color: #c0392b;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .footer a {
+      color: #2a8c7b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGO -->
+  <img src="logo.png" class="logo">
+
+  <h1>Konektao LLC</h1>
+  <h2>EMPLOYMENT VERIFICATION</h2>
+
+  <div id="content"></div>
+
+  <div class="footer">
+    For verification concerns, contact:<br>
+    <a href="mailto:hr@konektao.com">hr@konektao.com</a>
+  </div>
+
+<script>
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7-J4X2MfCVKamXM0jCdmNLywWK8B5HB4CAp1uJ661m2RiN9kze8mGUoVCfeLvQ0yWMcDB9PHAGjR/pub?output=csv";
+
+const params = new URLSearchParams(window.location.search);
+const employeeID = (params.get("id") || "").trim().toLowerCase();
+
+function renderNotFound(message = "Employee not found") {
+  document.getElementById("content").innerHTML = `
+    <div class="error">
+      ${message}<br>
+      <span style="font-weight: normal;">Please check the employee ID and try again.</span>
+    </div>
+  `;
+}
+
+function parseCSV(text) {
+  return text
+    .trim()
+    .split("\n")
+    .map(row => row.split(",").map(cell => cell.trim()));
+}
+
+function renderEmployee(emp) {
+  const statusRaw = (emp[4] || "").toUpperCase().trim();
+
+  let statusClass = "";
+  let statusText = "";
+  let icon = "";
+  let message = "";
+
+  if (statusRaw === "ACTIVE") {
+    statusClass = "status-active";
+    statusText = "ACTIVE";
+    icon = "✓";
+    message = "This employee is currently active with Konektao LLC.";
+  } else {
+    statusClass = "status-inactive";
+    statusText = "INACTIVE";
+    icon = "✕";
+    message = "This employee ID is inactive and should not be considered a valid or current employment record with Konektao LLC.";
+  }
+
+  document.getElementById("content").innerHTML = `
+    <div class="card">
+      <div class="name">${emp[1]}</div>
+
+      <div class="info-box">
+        <div class="row">
+          <div class="label">Employee ID:</div>
+          <div>${emp[0]}</div>
+        </div>
+        <div class="row">
+          <div class="label">Position:</div>
+          <div>${emp[2]}</div>
+        </div>
+        <div class="row">
+          <div class="label">Department:</div>
+          <div>${emp[3]}</div>
+        </div>
+      </div>
+
+      <div class="status-box ${statusClass}">
+        <div class="status-header">
+          <div class="status-icon">${icon}</div>
+          <div>STATUS: ${statusText}</div>
+        </div>
+        <div>${message}</div>
+      </div>
+    </div>
+  `;
+}
+
+if (!employeeID) {
+  renderNotFound("No employee ID provided");
+} else {
+  fetch(sheetURL)
+    .then(res => res.text())
+    .then(data => {
+      const rows = parseCSV(data);
+      const employees = rows.slice(1);
+
+      const found = employees.find(e =>
+        (e[0] || "")
+          .replace(/\s+/g, "")
+          .toLowerCase() === employeeID.replace(/\s+/g, "")
+      );
+
+      if (!found) {
+        renderNotFound();
+        return;
+      }
+
+      renderEmployee(found);
+    })
+    .catch(() => renderNotFound("Unable to load employee data"));
+}
+</script>
+
+</body>
+</html>
