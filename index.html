@@ -1,50 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Konektao LLC Employment Verification</title>
+
   <style>
     body {
-      font-family: Cambria, Cambria;
+      margin: 0;
+      font-family: Cambria, Georgia, serif;
       background: #f4f6f5;
+      color: #24313f;
       text-align: center;
-      padding: 40px;
-      color: #1f2d2b;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 40px 20px;
     }
 
     .logo {
-      width: 100px;
+      width: 130px;
       margin-bottom: 10px;
     }
 
-    h1 {
-      font-size: 26px;
-      margin-bottom: 5px;
+    .company {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #1f2f46;
     }
 
-    h2 {
-      color: #2a8c7b;
+    .title {
+      color: #1e7f6f;
       letter-spacing: 2px;
-      font-size: 16px;
-      margin-bottom: 30px;
-      border-bottom: 2px solid #2a8c7b;
-      display: inline-block;
-      padding-bottom: 5px;
-      width: 300px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .line {
+      width: 340px;
+      max-width: 75%;
+      height: 2px;
+      background: #1e7f6f;
+      margin: 10px auto 30px;
     }
 
     .card {
       background: #eef2f1;
-      padding: 25px;
       border-radius: 12px;
-      max-width: 600px;
-      margin: auto;
+      padding: 25px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      max-width: 620px;
+      margin: auto;
     }
 
     .name {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
       margin-bottom: 20px;
+      color: #1f2f46;
     }
 
     .info-box {
@@ -59,10 +76,17 @@
       display: flex;
       justify-content: space-between;
       margin: 8px 0;
+      gap: 16px;
     }
 
     .label {
       font-weight: bold;
+      color: #5f6775;
+    }
+
+    .value {
+      text-align: right;
+      color: #24313f;
     }
 
     .status-box {
@@ -86,14 +110,16 @@
 
     .status-header {
       font-weight: bold;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
+      font-size: 18px;
     }
 
     .status-icon {
       font-size: 16px;
+      font-weight: bold;
     }
 
     .error {
@@ -110,6 +136,7 @@
       margin-top: 40px;
       font-size: 14px;
       color: #666;
+      line-height: 1.6;
     }
 
     .footer a {
@@ -117,22 +144,50 @@
       text-decoration: none;
       font-weight: bold;
     }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 28px 14px;
+      }
+
+      .company {
+        font-size: 22px;
+      }
+
+      .name {
+        font-size: 22px;
+      }
+
+      .row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .value {
+        text-align: left;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- LOGO -->
-  <img src="logo.png" class="logo">
+  <div class="container">
 
-  <h1>Konektao LLC</h1>
-  <h2>EMPLOYMENT VERIFICATION</h2>
+    <img src="logo.png?v=2" class="logo" alt="Konektao Logo">
 
-  <div id="content"></div>
+    <div class="company">Konektao LLC</div>
 
-  <div class="footer">
-    For verification concerns, contact:<br>
-    <a href="mailto:hr@konektao.com">hr@konektao.com</a>
+    <div class="title">EMPLOYMENT VERIFICATION</div>
+    <div class="line"></div>
+
+    <div id="content"></div>
+
+    <div class="footer">
+      For verification concerns, contact:<br>
+      <a href="mailto:hr@konektao.com">hr@konektao.com</a>
+    </div>
+
   </div>
 
 <script>
@@ -150,11 +205,37 @@ function renderNotFound(message = "Employee not found") {
   `;
 }
 
+function parseCSVLine(line) {
+  const result = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const next = line[i + 1];
+
+    if (char === '"' && inQuotes && next === '"') {
+      current += '"';
+      i++;
+    } else if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current.trim());
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  result.push(current.trim());
+  return result.map(v => v.replace(/^"|"$/g, "").trim());
+}
+
 function parseCSV(text) {
   return text
     .trim()
-    .split("\n")
-    .map(row => row.split(",").map(cell => cell.trim()));
+    .split(/\r?\n/)
+    .map(parseCSVLine);
 }
 
 function renderEmployee(emp) {
@@ -184,15 +265,15 @@ function renderEmployee(emp) {
       <div class="info-box">
         <div class="row">
           <div class="label">Employee ID:</div>
-          <div>${emp[0]}</div>
+          <div class="value">${emp[0]}</div>
         </div>
         <div class="row">
           <div class="label">Position:</div>
-          <div>${emp[2]}</div>
+          <div class="value">${emp[2]}</div>
         </div>
         <div class="row">
           <div class="label">Department:</div>
-          <div>${emp[3]}</div>
+          <div class="value">${emp[3]}</div>
         </div>
       </div>
 
@@ -217,9 +298,8 @@ if (!employeeID) {
       const employees = rows.slice(1);
 
       const found = employees.find(e =>
-        (e[0] || "")
-          .replace(/\s+/g, "")
-          .toLowerCase() === employeeID.replace(/\s+/g, "")
+        ((e[0] || "").replace(/\s+/g, "").toLowerCase()) ===
+        employeeID.replace(/\s+/g, "")
       );
 
       if (!found) {
