@@ -1,197 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konektao LLC Employment Verification</title>
+  <title>Konektao LLC Verification</title>
 
   <style>
     body {
-      margin: 0;
-      font-family: Cambria, Cambria, Cambria;
+      font-family: Cambria, serif;
       background: #f4f6f5;
-      color: #24313f;
       text-align: center;
-    }
-
-    .container {
-      max-width: 700px;
-      margin: auto;
-      padding: 40px 20px;
+      padding: 40px;
+      color: #1f2d2b;
     }
 
     .logo {
-      width: 130px;
+      width: 100px;
       margin-bottom: 10px;
     }
 
-    .company {
+    h1 {
       font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: #1f2f46;
+      margin: 10px 0;
     }
 
-    .title {
-      color: #1e7f6f;
+    h2 {
+      color: #2f7d6b;
       letter-spacing: 2px;
-      font-size: 18px;
-      margin-bottom: 10px;
-      font-weight: bold;
+      font-size: 16px;
+      margin-bottom: 20px;
     }
 
     .line {
-      width: 340px;
-      max-width: 75%;
+      width: 220px;
       height: 2px;
-      background: #1e7f6f;
+      background: #2f7d6b;
       margin: 10px auto 30px;
     }
 
     .card {
-      background: #eef2f1;
+      background: #e9eeee;
+      padding: 30px;
       border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      max-width: 620px;
+      max-width: 600px;
       margin: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .name {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
-      color: #1f2f46;
     }
 
     .info-box {
-      background: #ffffff;
+      background: #f3f5f4;
       padding: 15px;
       border-radius: 10px;
-      margin-bottom: 20px;
       text-align: left;
+      margin-bottom: 20px;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
       margin: 8px 0;
-      gap: 16px;
     }
 
     .label {
       font-weight: bold;
-      color: #5f6775;
-    }
-
-    .value {
-      text-align: right;
-      color: #24313f;
+      color: #4a5a57;
     }
 
     .status-box {
       padding: 15px;
       border-radius: 10px;
+      border: 2px solid;
       text-align: left;
-      font-size: 14px;
-    }
-
-    .status-active {
-      border: 2px solid #2a8c7b;
-      background: #e8f5f2;
-      color: #2a8c7b;
-    }
-
-    .status-inactive {
-      border: 2px solid #c0392b;
-      background: #fdecea;
-      color: #c0392b;
     }
 
     .status-header {
-      font-weight: bold;
-      margin-bottom: 8px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 8px;
     }
 
+    /* ✅ ICON STYLE (FIXED) */
     .status-icon {
-      font-size: 16px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background-color: #2f7d6b;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 10px;
+      font-size: 14px;
       font-weight: bold;
+    }
+
+    .status-active {
+      border-color: #2f7d6b;
+      background: #e4f2ee;
+      color: #2f7d6b;
+    }
+
+    .status-inactive {
+      border-color: #c0392b;
+      background: #f8e5e3;
+      color: #c0392b;
+    }
+
+    .status-inactive .status-icon {
+      background-color: #c0392b;
     }
 
     .error {
-      background: #fdecea;
-      color: #c0392b;
-      padding: 20px;
+      color: red;
+      background: #f8e5e3;
+      padding: 15px;
       border-radius: 10px;
       max-width: 500px;
       margin: auto;
-      font-weight: bold;
     }
 
     .footer {
       margin-top: 40px;
       font-size: 14px;
-      color: #666;
-      line-height: 1.6;
     }
 
-    .footer a {
-      color: #2a8c7b;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    @media (max-width: 640px) {
-      .container {
-        padding: 28px 14px;
-      }
-
-      .company {
-        font-size: 22px;
-      }
-
-      .name {
-        font-size: 22px;
-      }
-
-      .row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .value {
-        text-align: left;
-      }
+    .footer b {
+      color: #2f7d6b;
     }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <img src="logo.png" class="logo">
 
-    <img src="logo.png?v=2" class="logo" alt="Konektao Logo">
+  <h1>Konektao LLC</h1>
+  <h2>EMPLOYMENT VERIFICATION</h2>
+  <div class="line"></div>
 
-    <div class="company">Konektao LLC</div>
+  <div id="content"></div>
 
-    <div class="title">EMPLOYMENT VERIFICATION</div>
-    <div class="line"></div>
-
-    <div id="content"></div>
-
-    <div class="footer">
-      For verification concerns, contact:<br>
-      <a href="mailto:hr@konektao.com">hr@konektao.com</a>
-    </div>
-
+  <div class="footer">
+    For verification concerns, contact:<br>
+    <b>hr@konektao.com</b>
   </div>
 
 <script>
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSmKTeufiEfTA4GpMI6_D6j7QjFjQnPLqb3en-EDr3edn-j1J4-Y_PCv9wNSLGY0-so6-igBcfFSDr1/pub?output=csv";
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTL7-J4X2MfCVKamXM0jCdmNLywWK8B5HB4CAp1uJ661m2RiN9kze8mGUoVCfeLvQ0yWMcDB9PHAGjR/pub?output=csv";
 
 const params = new URLSearchParams(window.location.search);
 const employeeID = (params.get("id") || "").trim().toLowerCase();
@@ -200,42 +160,16 @@ function renderNotFound(message = "Employee not found") {
   document.getElementById("content").innerHTML = `
     <div class="error">
       ${message}<br>
-      <span style="font-weight: normal;">Please check the employee ID and try again.</span>
+      <span>Please check the employee ID and try again.</span>
     </div>
   `;
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    const next = line[i + 1];
-
-    if (char === '"' && inQuotes && next === '"') {
-      current += '"';
-      i++;
-    } else if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      result.push(current.trim());
-      current = "";
-    } else {
-      current += char;
-    }
-  }
-
-  result.push(current.trim());
-  return result.map(v => v.replace(/^"|"$/g, "").trim());
 }
 
 function parseCSV(text) {
   return text
     .trim()
-    .split(/\r?\n/)
-    .map(parseCSVLine);
+    .split("\n")
+    .map(row => row.split(",").map(cell => cell.trim()));
 }
 
 function renderEmployee(emp) {
@@ -249,7 +183,7 @@ function renderEmployee(emp) {
   if (statusRaw === "ACTIVE") {
     statusClass = "status-active";
     statusText = "ACTIVE";
-    icon = "✓";
+    icon = "✔";
     message = "This employee is currently active with Konektao LLC.";
   } else {
     statusClass = "status-inactive";
@@ -265,15 +199,15 @@ function renderEmployee(emp) {
       <div class="info-box">
         <div class="row">
           <div class="label">Employee ID:</div>
-          <div class="value">${emp[0]}</div>
+          <div>${emp[0]}</div>
         </div>
         <div class="row">
           <div class="label">Position:</div>
-          <div class="value">${emp[2]}</div>
+          <div>${emp[2]}</div>
         </div>
         <div class="row">
           <div class="label">Department:</div>
-          <div class="value">${emp[3]}</div>
+          <div>${emp[3]}</div>
         </div>
       </div>
 
@@ -297,10 +231,7 @@ if (!employeeID) {
       const rows = parseCSV(data);
       const employees = rows.slice(1);
 
-      const found = employees.find(e =>
-        ((e[0] || "").replace(/\s+/g, "").toLowerCase()) ===
-        employeeID.replace(/\s+/g, "")
-      );
+      const found = employees.find(e => ((e[0] || "").trim().toLowerCase()) === employeeID);
 
       if (!found) {
         renderNotFound();
